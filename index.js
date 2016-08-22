@@ -1,7 +1,10 @@
 const express = require('express');
 const useragent = require('useragent');
 const accepts = require('accepts');
+const requestIp = require('request-ip');
 const app = express();
+
+app.use(requestIp.mw())
 
 app.set('port', (process.env.PORT || 5000));
 app.get('/', function (request, response) {
@@ -9,7 +12,7 @@ app.get('/', function (request, response) {
     const langs = accepts(request).languages();
 
     response.json({
-        ipaddress: request.connection.remoteAddress,
+        ipaddress: request.clientIp,
         language: langs[0],
         software: ua.os.family,
     });
